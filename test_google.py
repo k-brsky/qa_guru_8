@@ -15,5 +15,5 @@ def test_google_search(browser_open):
     browser.element('[id="search"]').should(have.text('User-oriented Web UI browser tests'))
 
 def test_google_not_found(browser_open):
-    browser.element('[name="q"]').should(be.blank).type('енаппгпшграпне').press_enter()
+    browser.element('[name="q"]').should(be.blank).type('котик').press_enter()
     browser.element('[id="center_col"]').should(have.text('ничего не найдено'))
