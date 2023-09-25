@@ -3,7 +3,7 @@ from selene import browser, be, have
 
 @pytest.fixture(scope='function')
 def browser_open():
-    browser.open('https://www.google.com')
+    browser.open('1https://www.google.com')
     browser.driver.set_window_size(1980, 1080)
 
     yield
