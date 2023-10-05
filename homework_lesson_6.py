@@ -23,12 +23,14 @@ def test_dark_theme_by_time_and_user_choice():
 
     if dark_theme_enabled_by_user == False:
         is_dark_theme = False
+    if dark_theme_enabled_by_user == True:
+        is_dark_theme = True
     elif current_time < time(hour=6):
         is_dark_theme = True
     elif current_time >= time(hour=22):
         is_dark_theme = True
     else:
-        is_dark_theme = True
+        is_dark_theme = False
 
     assert is_dark_theme is True
 
@@ -70,7 +72,11 @@ def test_find_suitable_user():
 # сделать буквы заглавными (или первую букву), затем вывести значения всех аргументов этой функции:
 # >>> open_browser(browser_name="Chrome")
 # "Open Browser [Chrome]"
-
+def make_readable_function(func, *args):
+    func_name = func.__name__.replace("_", " ").title()
+    arg_name = ", ".join([*args])
+    function_name = f'{func_name} [{arg_name}]'
+    return function_name
 
 def test_readable_function():
     open_browser(browser_name="Chrome")
@@ -78,26 +84,16 @@ def test_readable_function():
     find_registration_button_on_login_page(page_url="https://companyname.com/login", button_text="Register")
 
 
-def readable_open_browser():
-    readable_name = open_browser.__name__.replace("_", " ").title()
-    return readable_name
-
 def open_browser(browser_name):
-    actual_result = f'{readable_open_browser()} [{browser_name}]'
+    actual_result = make_readable_function(open_browser, browser_name)
     assert actual_result == "Open Browser [Chrome]"
 
-def readable_company_homepage():
-    readable_name = go_to_companyname_homepage.__name__.replace("_", " ").title()
-    return readable_name
 
 def go_to_companyname_homepage(page_url):
-    actual_result = f'{readable_company_homepage()} [{page_url}]'
+    actual_result = make_readable_function(go_to_companyname_homepage, page_url)
     assert actual_result == "Go To Companyname Homepage [https://companyname.com]"
 
-def readable_registration_button():
-    readable_name = find_registration_button_on_login_page.__name__.replace("_", " ").title()
-    return readable_name
 
 def find_registration_button_on_login_page(page_url, button_text):
-    actual_result = f'{readable_registration_button()} [{page_url}, {button_text}]'
+    actual_result = make_readable_function(find_registration_button_on_login_page, page_url, button_text)
     assert actual_result == "Find Registration Button On Login Page [https://companyname.com/login, Register]"
