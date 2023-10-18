@@ -3,6 +3,8 @@ import os
 from os.path import basename
 from openpyxl import load_workbook
 from xlrd import open_workbook
+from pypdf import PdfReader
+import shutil
 
 def test_make_zip():
     path = 'resources'
@@ -42,12 +44,25 @@ def test_check_xls():
     cell_count_legs_resources = work_book_resources.sheet_by_index(0).cell_value(3, 1)
 
     with ZipFile('tmp/homework.zip') as zf:
-        work_book_zip = open_workbook(zf.open('test_sheet_xls.xls'))
+        work_book_zip = open_workbook(file_contents=zf.read('test_sheet_xls.xls'))
         cell_animal_zip = work_book_zip.sheet_by_index(0).cell_value(3, 0)
         cell_count_legs_zip = work_book_zip.sheet_by_index(0).cell_value(3, 1)
         assert cell_animal_resorces == cell_animal_zip
         assert cell_count_legs_resources == cell_count_legs_zip
 
+def test_check_pdf():
+    reader_resources = PdfReader('resources/file_pdf.pdf')
+    page_resources = reader_resources.pages[0]
+    text_resources = page_resources.extract_text()
+
+    with ZipFile('tmp/homework.zip') as zf:
+        reader_zip = PdfReader(zf.open('file_pdf.pdf'))
+        page_zip = reader_zip.pages[0]
+        text_zip = page_zip.extract_text()
+        assert text_resources == text_zip
+
+def test_remove_zip():
+    shutil.rmtree('tmp')
 
 
 
