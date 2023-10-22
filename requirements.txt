@@ -1,5 +1,1 @@
 pytest
-selene == 2.0.0rc4
-openpyxl
-xlrd
-pypdf

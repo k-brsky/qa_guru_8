@@ -68,22 +68,10 @@ class Cart:
         Если remove_count не передан, то удаляется вся позиция
         Если remove_count больше, чем количество продуктов в позиции, то удаляется вся позиция
         """
-        # if remove_count >= self.products[product] or remove_count is None:
-        #     del self.products[product]
-        # else:
-        #     self.products[product] = self.products[product] - remove_count
-
-        # if remove_count < self.products[product]:
-        #     self.products[product] = self.products[product] - remove_count
-        # else:
-        #     del self.products[product]
-
-        # if remove_count < self.products[product]:
-        #     self.products[product] = self.products[product] - remove_count
-        # elif remove_count >= self.products[product]:
-        #     self.products.pop(product)
-        # elif remove_count is None:
-        #     self.products.pop(product)
+        if remove_count is None or remove_count >= self.products[product]:
+            del self.products[product]
+        else:
+            self.products[product] = self.products[product] - remove_count
 
     def clear(self):
         self.products.clear()
@@ -100,4 +88,10 @@ class Cart:
         Учтите, что товаров может не хватать на складе.
         В этом случае нужно выбросить исключение ValueError
         """
-        raise NotImplementedError
+        for product, quantity in self.products.items():
+            if product.quantity >= self.products[product]:
+                product.quantity = product.quantity - self.products[product]
+            elif product.quantity < self.products[product]:
+                raise ValueError
+        self.clear()
+
