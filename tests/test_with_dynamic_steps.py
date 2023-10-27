@@ -3,16 +3,13 @@ from allure_commons.types import Severity
 from selene import browser, by, have
 
 
-def test_dynamic_labels():
+def test_github_with_steps(params_for_browser):
     allure.dynamic.tag('web')
     allure.dynamic.severity(Severity.NORMAL)
     allure.dynamic.label('owner', 'k-brsky')
     allure.dynamic.feature('Таб Issues')
     allure.dynamic.story('Найти таб Issues')
     allure.dynamic.link('"https://github.com", name="Testing"')
-
-
-def test_github_with_steps(params_for_browser):
     with allure.step('Открываем главную страницу GitHub'):
         browser.open('https://github.com')
 
