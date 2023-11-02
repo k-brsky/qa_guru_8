@@ -8,4 +8,4 @@ def browser_management():
 
     yield
 
-    browser.close()
+    browser.quit()
