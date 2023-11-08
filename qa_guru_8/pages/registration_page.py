@@ -1,5 +1,6 @@
 from selene import browser, have, command
 import os.path
+from users.students import User
 
 
 class RegistrationPage:
@@ -7,51 +8,47 @@ class RegistrationPage:
     def open(self):
         browser.open('/automation-practice-form')
 
-    def fill_first_name(self, value):
-        browser.element('#firstName').click().type(value)
+    def register_user(self, user: User):
+        browser.element('#firstName').click().type(user.name)
+        browser.element('#lastName').click().type(user.last_name)
+        browser.element('#userEmail').click().type(user.email)
+        browser.all('[name=gender]').element_by(have.value(user.gender)).element('..').click()
+        browser.element('#userNumber').click().type(user.phone_number)
 
-    def fill_last_name(self, value):
-        browser.element('#lastName').click().type(value)
-
-    def fill_email(self, value):
-        browser.element('#userEmail').click().type(value)
-
-    def choose_gender(self, gender):
-        browser.all('[name=gender]').element_by(have.value(gender)).element('..').click()
-
-    def fill_number(self, value):
-        browser.element('#userNumber').click().type(value)
-
-    def fill_birthday(self, day, month, year):
         browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__month-select').type(month)
-        browser.element('.react-datepicker__year-select').type(year)
-        browser.element(f'.react-datepicker__day--0{day}:not(.react-datepicker__day--outside-month)').click()
+        browser.element('.react-datepicker__month-select').type(user.date_of_birth.strftime('%B'))
+        browser.element('.react-datepicker__year-select').type(user.date_of_birth.year)
+        browser.element(
+            f'.react-datepicker__day--0{user.date_of_birth.day}:not(.react-datepicker__day--outside-month)').click()
 
-    def fill_subject(self, value):
-        browser.element("#subjectsInput").type(value).press_enter()
+        browser.element("#subjectsInput").type(user.subject).press_enter()
+        browser.all('.custom-checkbox').element_by(have.exact_text(user.hobby)).click()
 
-    def choose_hobby(self, value):
-        browser.all('.custom-checkbox').element_by(have.exact_text('Reading')).click()
-
-    def upload_image(self, file_name):
         browser.element('#uploadPicture').perform(command.js.scroll_into_view).send_keys(
-            os.path.abspath(f'resources/{file_name}'))
+            os.path.abspath(f'resources/{user.photo}'))
 
-    def fill_current_adress(self, value):
-        browser.element('#currentAddress').type(value)
+        browser.element('#currentAddress').type(user.current_addres)
 
-    def choose_state(self, value):
         browser.element('#state').click()
-        browser.all('[id^=react-select][id*=option]').element_by(have.exact_text(value)).click()
+        browser.all('[id^=react-select][id*=option]').element_by(have.exact_text(user.state)).click()
 
-    def choose_city(self, value):
         browser.element('#city').click()
-        browser.all('[id^=react-select][id*=option]').element_by(have.exact_text(value)).click()
+        browser.all('[id^=react-select][id*=option]').element_by(have.exact_text(user.city)).click()
 
-    def submit(self):
         browser.element('#submit').perform(command.js.click)
 
-    @property
-    def assert_submitted_form(self):
-        return browser.element('.table').all('td').even
+    def assert_submitted_form(self, user: User):
+        browser.element('.table').all('td').even.should(
+            have.exact_texts(
+                f'{user.name} {user.last_name}',
+                user.email,
+                user.gender,
+                user.phone_number,
+                user.date_of_birth.strftime('%d %B,%Y'),
+                user.subject,
+                user.hobby,
+                user.photo,
+                user.current_addres,
+                f'{user.state} {user.city}',
+            )
+        )
