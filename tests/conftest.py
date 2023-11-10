@@ -25,7 +25,7 @@ def create_user():
         date_of_birth=datetime.date(1990, 5, 10),
         subject='Chemistry',
         hobby='Reading',
-        photo='822806.jpg',
+        photo='photo.jpg',
         current_addres='ulitsa Pushkina, dom Kolotushkina',
         state='Haryana',
         city='Karnal'

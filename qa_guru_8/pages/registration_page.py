@@ -1,6 +1,6 @@
 from selene import browser, have, command
-import os.path
 from users.students import User
+from qa_guru_8.paths import path_to_image
 
 
 class RegistrationPage:
@@ -25,7 +25,7 @@ class RegistrationPage:
         browser.all('.custom-checkbox').element_by(have.exact_text(user.hobby)).click()
 
         browser.element('#uploadPicture').perform(command.js.scroll_into_view).send_keys(
-            os.path.abspath(f'resources/{user.photo}'))
+            path_to_image.path(user.photo))
 
         browser.element('#currentAddress').type(user.current_addres)
 
