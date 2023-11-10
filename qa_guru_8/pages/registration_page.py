@@ -1,5 +1,5 @@
 from selene import browser, have, command
-import os.path
+from qa_guru_8.paths import path_to_image
 
 
 class RegistrationPage:
@@ -35,8 +35,7 @@ class RegistrationPage:
         browser.all('.custom-checkbox').element_by(have.exact_text('Reading')).click()
 
     def upload_image(self, file_name):
-        browser.element('#uploadPicture').perform(command.js.scroll_into_view).send_keys(
-            os.path.abspath(f'resources/{file_name}'))
+        browser.element('#uploadPicture').perform(command.js.scroll_into_view).send_keys(path_to_image.path(file_name))
 
     def fill_current_adress(self, value):
         browser.element('#currentAddress').type(value)

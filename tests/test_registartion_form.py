@@ -1,5 +1,4 @@
-import os.path
-from selene import browser, command, have
+from selene import have
 from qa_guru_8.pages.registration_page import RegistrationPage
 
 
@@ -17,7 +16,7 @@ def test_form():
     registration_page.fill_birthday(10, 'May', 1990)
     registration_page.fill_subject('Chemistry')
     registration_page.choose_hobby('Reading')
-    registration_page.upload_image('822806.jpg')
+    registration_page.upload_image('photo.jpg')
     registration_page.fill_current_adress('ulitsa Pushkina, dom Kolotushkina')
     registration_page.choose_state('Haryana')
     registration_page.choose_city('Karnal')
@@ -34,7 +33,7 @@ def test_form():
             '10 May,1990',
             'Chemistry',
             'Reading',
-            '822806.jpg',
+            'photo.jpg',
             'ulitsa Pushkina, dom Kolotushkina',
             'Haryana Karnal',
         )
