@@ -1,11 +1,34 @@
 import pytest
-from selene import browser
+from selene import Browser, Config
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from qa_guru_8.utils import add_screenshot, add_logs, add_html, add_video
+
 
 @pytest.fixture(scope='function', autouse=True)
-def browser_management():
-    browser.driver.set_window_size(1980, 1080)
-    browser.config.base_url = 'https://demoqa.com'
+def setup_browser():
+    options = Options()
+    selenoid_capabilities = {
+        "browserName": "chrome",
+        "browserVersion": "100.0",
+        "selenoid:options": {
+            "enableVNC": True,
+            "enableVideo": False
+        }
+    }
 
-    yield
+    options.capabilities.update(selenoid_capabilities)
+    driver = webdriver.Remote(
+        command_executor="https://user1%1234@selenoid:autotests.cloud/wd/hub",
+        options=options)
 
-    browser.close()
+    browser = Browser(Config(driver))
+
+    yield browser
+
+    add_screenshot(browser)
+    add_logs(browser)
+    add_html(browser)
+    add_video(browser)
+
+    browser.quit()
