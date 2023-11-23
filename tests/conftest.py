@@ -13,16 +13,19 @@ def setup_browser():
         "browserVersion": "100.0",
         "selenoid:options": {
             "enableVNC": True,
-            "enableVideo": False
+            "enableVideo": True
         }
     }
 
     options.capabilities.update(selenoid_capabilities)
     driver = webdriver.Remote(
-        command_executor="https://user1:1234@selenoid.autotests.cloud/wd/hub",
+        command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
         options=options)
 
     browser.config.driver = driver
+    browser.config.base_url = "https://demoqa.com"
+    browser.config.window_height = 1980
+    browser.config.window_width = 1080
 
     yield browser
 
